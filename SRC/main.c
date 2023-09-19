@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Sarah <Sarah@student.42.fr>                +#+  +:+       +#+        */
+/*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 14:13:11 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/14 19:01:15 by Sarah            ###   ########.fr       */
+/*   Updated: 2023/09/19 18:56:38 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,89 +22,106 @@ void	free_map(int i, char **map)
 	while (i >= 0)
 	{
 		free(map[i]);
-		i--;
+		--i;
 	}
 	free(map);
 }
 
-char	**fill_map(t_list *strings_collected)
-{
-	char **map;
-	int size_y;
-	int	i;
 
-	size_y = ft_lstsize(strings_collected);
-	map = (char **)malloc((size_y + 1) * sizeof(char *));
-	if (!map)
-		return (NULL);
-	i = 0;
-	while (i < size_y)
-	{
-		map[i] = ft_strdup((char *)strings_collected->content);
-		// ft_printf("strings_collected : %s", map[i]);
-		if (!map[i])
-			free_map(i, map);
-		i++;
-		strings_collected = strings_collected->next;
-	}
-	map[size_y] = NULL;
-	return (map);	
-}
-
-t_list	*collect_strings(int fd)
+char	*collect_strings(int fd)
 {
-	t_list *strings_collected;
-	t_list *new_node;
-	char *str;
+	char	*strings_collected;
+	char	*str;
+	char	*temp;
 
 	str = get_next_line(fd);
 	strings_collected = NULL;
 	while (str)
 	{
-		new_node = ft_lstnew(str);
-		if (strings_collected == NULL)
-			strings_collected = new_node;
-		else
-			ft_lstadd_back(&strings_collected, new_node);
+		temp = strings_collected;
+		strings_collected = ft_strjoin_mod(temp, str);
+		free(temp);
 		free(str);
 		str = get_next_line(fd);
 	}
 	return (strings_collected);
 }
 
-char	**convert_ber()
+int		check_map(char *strings_collected)
+{
+	int	i;
+
+	i = 0;
+	while (strings_collected && strings_collected[i])
+	{
+		if (strings_collected[i] == '\n' && strings_collected[i + 1] == '\n')
+			return (1);
+		else if (strings_collected[i] == '\n' || strings_collected[i] == '0' 
+			|| strings_collected[i] == '1' || strings_collected[i] == 'C' 
+			|| strings_collected[i] == 'E' || strings_collected[i] == 'P')
+			i++;
+		else
+			return (1);
+	}
+	return (0);
+}
+
+
+char	**convert_ber(char *lib)
 {
 	int		fd;
-	char	*lib;
 	char	**map;
-	t_list	*strings_collected;
+	char	*strings_collected;
 
-	lib = "map.ber";
+	map = NULL;
 	fd = open(lib, O_RDONLY);
+	if (fd < 0)
+		ft_printf("open failed\n"); // ATTENTION
 	strings_collected = collect_strings(fd);
-	map = fill_map(strings_collected);
+	if (check_map(strings_collected) == 1)
+	{
+		write (1, "Error\nWrong map bitch\n", 22);
+		return (ft_error());
+	}
+	map = ft_split(strings_collected, '\n');
 	return (map);
 }
 
-int	main(void)
+int	ft_strcmp_mod(char *s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	while (s1[i] == s2[i] && s1[i] && s2[i])
+		i++;
+	return (s1[i] - s2[i]);
+}
+
+int	check_format_ber(char *str)
+{
+    size_t len = ft_strlen(str);
+
+    if (len < 4)
+        return (1);
+    return (ft_strcmp_mod(str + len - 4, ".ber"));
+}
+
+int	main(int argc, char **argv)
 {
 	// void			*mlx;
 	// void			*window;
 	// t_img_struct	img;
 	char			**map;
+	char			*lib;
 	int				i;
-	int				x;
 
-	x = 0;
 	i = 0;
-	map = convert_ber();
-	while (map[i])
-	{
-		while(map[i][x++])
-			ft_printf("%c", map[i][x]);
-		i++;
-		x = 0;
-	}
+	if (argc != 2)
+		return (1); // error for wrong number of arguments PERROR
+	if (check_format_ber(argv[1]) != 0)
+		return (1); // error for wrong format of file PERROR
+	lib = argv[1];
+	map = convert_ber(lib);
 	// mlx = mlx_init();
 	// if (!mlx)
 	// 	ft_error();

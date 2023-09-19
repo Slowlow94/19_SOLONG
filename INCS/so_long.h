@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   so_long.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Sarah <Sarah@student.42.fr>                +#+  +:+       +#+        */
+/*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:29:12 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/14 18:03:46 by Sarah            ###   ########.fr       */
+/*   Updated: 2023/09/19 18:45:23 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,11 @@ typedef struct s_img_struct {
 }				t_img_struct;
 
 void	*ft_error(void);
-char	**convert_ber(void);
-t_list	*collect_strings(int fd);
-char	**fill_map(t_list *strings_collected);
+void	free_map(int i, char **map);
+char	**convert_ber(char *lib);
+char	*collect_strings(int fd);
+int		check_map(char *strings_collected);
+int		check_format_ber(char *str);
+int		ft_strcmp_mod(char *s1, char *s2);
 
 #endif
