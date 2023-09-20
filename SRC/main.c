@@ -6,7 +6,7 @@
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 14:13:11 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/19 18:56:38 by salowie          ###   ########.fr       */
+/*   Updated: 2023/09/20 18:11:21 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,112 +27,98 @@ void	free_map(int i, char **map)
 	free(map);
 }
 
-
-char	*collect_strings(int fd)
+int	images_init(void *mlx, void *window, char **map, t_map *map_size)
 {
-	char	*strings_collected;
-	char	*str;
-	char	*temp;
+	int	size_tile;
+	int	x;
+	int	y;
+	t_struct wall;
 
-	str = get_next_line(fd);
-	strings_collected = NULL;
-	while (str)
+	ft_printf("Width : %d\n", map_size->width);
+	ft_printf("h : %d\n", map_size->height);
+	size_tile = 64;
+	x = 0;
+	y = 0;
+	wall.ptr = mlx_xpm_file_to_image(mlx, "XPM/pink.xpm", &wall.width, &wall.height);
+	printf("%p\n", wall.ptr);
+	// if (!wall.ptr)
+	// 	return (1);
+	while (y < map_size->height)
 	{
-		temp = strings_collected;
-		strings_collected = ft_strjoin_mod(temp, str);
-		free(temp);
-		free(str);
-		str = get_next_line(fd);
-	}
-	return (strings_collected);
-}
-
-int		check_map(char *strings_collected)
-{
-	int	i;
-
-	i = 0;
-	while (strings_collected && strings_collected[i])
-	{
-		if (strings_collected[i] == '\n' && strings_collected[i + 1] == '\n')
-			return (1);
-		else if (strings_collected[i] == '\n' || strings_collected[i] == '0' 
-			|| strings_collected[i] == '1' || strings_collected[i] == 'C' 
-			|| strings_collected[i] == 'E' || strings_collected[i] == 'P')
-			i++;
-		else
-			return (1);
+		x = 0;
+		while (x < map_size->width)
+		{
+			if (map[y][x] == '1')
+				mlx_put_image_to_window(mlx, window, wall.ptr, x * size_tile, y * size_tile);
+			x++;
+		}
+		y++;
 	}
 	return (0);
 }
 
-
-char	**convert_ber(char *lib)
+void	map_init(char **map, t_map *map_size)
 {
-	int		fd;
-	char	**map;
-	char	*strings_collected;
+	void		*mlx;
+	void		*window;
+	// void		*img;
 
-	map = NULL;
-	fd = open(lib, O_RDONLY);
-	if (fd < 0)
-		ft_printf("open failed\n"); // ATTENTION
-	strings_collected = collect_strings(fd);
-	if (check_map(strings_collected) == 1)
+	mlx = mlx_init();
+	if (!mlx)
+		ft_error();
+	window = mlx_new_window(mlx, 1600, 1280, "paradise");
+	if (!window)
 	{
-		write (1, "Error\nWrong map bitch\n", 22);
-		return (ft_error());
+		mlx_destroy_window(mlx, window);
+		ft_error();
 	}
-	map = ft_split(strings_collected, '\n');
-	return (map);
+	// img = mlx_xpm_file_to_image(mlx, "XPM/pinkie_BIG.xpm", 0, 0);
+	// mlx_put_image_to_window(mlx, window, img, 0, 0);
+	images_init(mlx, window, map, map_size);
+	ft_printf("test\n");
+	mlx_loop(mlx);
 }
 
-int	ft_strcmp_mod(char *s1, char *s2)
+t_map count_map(char **map)
 {
-	int	i;
-
+    int		i;
+    int		currentLineWidth;
+	t_map	map_size;
+    
+	ft_printf("test");
+    (&map_size)->height = 0;
+    (&map_size)->width = 0;
 	i = 0;
-	while (s1[i] == s2[i] && s1[i] && s2[i])
-		i++;
-	return (s1[i] - s2[i]);
-}
-
-int	check_format_ber(char *str)
-{
-    size_t len = ft_strlen(str);
-
-    if (len < 4)
-        return (1);
-    return (ft_strcmp_mod(str + len - 4, ".ber"));
+    while (map[i] != NULL)
+	{
+        currentLineWidth = 0;
+		printf("%s\n", map[i]);
+        while (map[i][currentLineWidth] != '\0')
+            currentLineWidth++;
+        if(currentLineWidth > map_size.width)
+            map_size.width = currentLineWidth;
+        i++;
+        map_size.height++;
+    }
+	ft_printf("%d\n", map_size.height);
+	ft_printf("%d\n", map_size.width);
+	return (map_size);
 }
 
 int	main(int argc, char **argv)
 {
-	// void			*mlx;
-	// void			*window;
-	// t_img_struct	img;
-	char			**map;
-	char			*lib;
-	int				i;
+	char	**map;
+	t_map	map_size;
+	char	*lib;
 
-	i = 0;
 	if (argc != 2)
 		return (1); // error for wrong number of arguments PERROR
 	if (check_format_ber(argv[1]) != 0)
 		return (1); // error for wrong format of file PERROR
 	lib = argv[1];
 	map = convert_ber(lib);
-	// mlx = mlx_init();
-	// if (!mlx)
-	// 	ft_error();
-	// window = mlx_new_window(mlx, 1600, 1200, "paradise");
-	// if (!window)
-	// {
-	// 	mlx_destroy_window(mlx, window);
-	// 	ft_error();
-	// }
-	// img.ptr_img = mlx_xpm_file_to_image(mlx, "XPM/blue_poney.xpm", &img.width, &img.height);
-	// mlx_put_image_to_window(mlx, window, img.ptr_img, 0, 0);
-	// mlx_loop(mlx);
+	ft_printf("%s\n", map[0]);
+	map_size = count_map(map);
+	map_init(map, &map_size);
 	return (0);
 }
