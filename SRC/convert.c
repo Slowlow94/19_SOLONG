@@ -6,7 +6,7 @@
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 15:39:59 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/20 15:53:38 by salowie          ###   ########.fr       */
+/*   Updated: 2023/09/21 17:56:59 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,16 @@ char	**convert_ber(char *lib)
 
 	map = NULL;
 	fd = open(lib, O_RDONLY);
-	// if (fd < 0)
-	// 	ft_printf("open failed\n"); // ATTENTION
+	if (fd < 0)
+	{
+		ft_error('o');
+		exit (0);
+	}
 	strings_collected = collect_strings(fd);
 	if (check_map(strings_collected) == 1)
 	{
-		write (1, "Error\nWrong map bitch\n", 22);
-		return (ft_error());
+		ft_error('m');
+		exit (0);
 	}
 	map = ft_split(strings_collected, '\n');
 	return (map);
