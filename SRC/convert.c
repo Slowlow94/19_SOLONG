@@ -6,7 +6,7 @@
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 15:39:59 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/21 17:56:59 by salowie          ###   ########.fr       */
+/*   Updated: 2023/09/22 17:45:35 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	**convert_ber(char *lib)
 		exit (0);
 	}
 	strings_collected = collect_strings(fd);
-	if (check_map(strings_collected) == 1)
+	if (check_char(strings_collected) == 1)
 	{
 		ft_error('m');
 		exit (0);
@@ -54,7 +54,7 @@ char	**convert_ber(char *lib)
 	return (map);
 }
 
-int		check_map(char *strings_collected)
+int		check_char(char *strings_collected)
 {
 	int	i;
 
@@ -66,7 +66,7 @@ int		check_map(char *strings_collected)
 		else if (strings_collected[i] == '\n' || strings_collected[i] == '0' 
 			|| strings_collected[i] == '1' || strings_collected[i] == 'C' 
 			|| strings_collected[i] == 'E' || strings_collected[i] == 'P')
-			i++;
+				i++;
 		else
 			return (1);
 	}

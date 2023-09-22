@@ -6,7 +6,7 @@
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 14:13:11 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/21 18:01:21 by salowie          ###   ########.fr       */
+/*   Updated: 2023/09/22 18:45:30 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,60 @@ int	ft_error(char c)
 	else if (c == 'w')
 		ft_printf("Smalleh, ERROR !\nCause : the window is fucked up\n");
 	else if (c == 'm')
-		ft_printf("Smalleh, ERROR !\nCause : Wrong map bitch\n");
+		ft_printf("Smalleh, ERROR !\nCause : invalide map bitch\n");
 	else if (c == 'a')
 		ft_printf("Smalleh, ERROR !\nCause : Wrong number of arguments\n");
 	else if (c == 'o')
 		ft_printf("Smalleh, ERROR !\nCause : opening of fd failed\n");
-	else if (c == 'c')
-		ft_printf("Smalleh, ERROR !\nCause : opening of fd failed\n");
+	else if (c == 'e')
+		ft_printf("Smalleh, ERROR !\nCause : no exit\n");
 	else
 		return (0);
 	return (1);
+}
+
+void	free_images(t_datas *d)
+{
+	if (d == NULL || d->img == NULL)
+		return ;
+	if (d->img->wall.xpm)
+		mlx_destroy_image(d->mlx, d->img->wall.xpm);
+	if (d->img->ground.xpm)
+		mlx_destroy_image(d->mlx, d->img->ground.xpm);
+	if (d->img->collect.xpm)
+		mlx_destroy_image(d->mlx, d->img->collect.xpm);
+	if (d->img->poney.xpm)
+		mlx_destroy_image(d->mlx, d->img->poney.xpm);
+	if (d->img->exit.xpm)
+		mlx_destroy_image(d->mlx, d->img->exit.xpm);
+	// if (d->img->final.xpm)
+	// 	mlx_destroy_image(d->mlx, d->img->final.xpm);
+	if (d->img)
+		free(d->img);
+	else
+		return ;
+}
+
+void	free_all(t_datas *d)
+{
+	int	y;
+
+	y = 0;
+	if (!d)
+		return ;
+	if (d->img)
+		free_images(d);
+	if (d->map)
+	{
+		while (y < d->map->h)
+		{
+			free(d->map->map[y]);
+			y++;
+		}
+		free(d->map->map);
+		free(d->map);
+	}
+	free(d);
 }
 
 void	free_map(int i, char **map)
@@ -56,16 +100,19 @@ int	main(int argc, char **argv)
 	datas->map = malloc(sizeof(t_map));
     if (datas->map == NULL)
     {
-        free(datas);
+		free_all(datas);
         exit(1);
     }
+	datas->img = NULL;
+	datas->yes_exit = 0;
+	datas->nbr_of_collect = 0;
 	if (argc != 2)
 		return (ft_error('f'));
 	if (check_format_ber(argv[1]) != 0)
 		return (ft_error('f'));
 	lib = argv[1];
 	datas->map->map = convert_ber(lib);
-	count_map(datas->map);
+	check_map(datas);
 	map_init(datas);
 	return (0);
 }

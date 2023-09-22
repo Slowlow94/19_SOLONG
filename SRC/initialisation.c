@@ -6,53 +6,11 @@
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 18:00:12 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/21 18:51:55 by salowie          ###   ########.fr       */
+/*   Updated: 2023/09/22 18:45:19 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-
-void count_map(t_map *map)
-{
-    int		i;
-    int		currentLineWidth;
-    
-    map->h = 0;
-    map->w = 0;
-	i = 0;
-    while (map->map[i] != NULL)
-	{
-        currentLineWidth = 0;
-        while (map->map[i][currentLineWidth] != '\0')
-            currentLineWidth++;
-        if(currentLineWidth > map->w)
-            map->w = currentLineWidth;
-        i++;
-        map->h++;
-    }
-}
-
-int key_event(int keycode, void *param)
-{
- 	t_datas *datas;
-	
-	datas = (t_datas *)param;
-    if (keycode == 53)
-	{
-        mlx_destroy_window(datas->mlx, datas->win);
-		exit (0);
-	}
-	if (keycode == 123) // vers la gauche
-		to_the_left(datas);
-	else if (keycode == 124) // vers la droite
-		to_the_right(datas);
-	else if (keycode == 125) // vers le bas
-		to_the_bottom(datas);
-	else if (keycode == 126) // vers le haut
-		to_the_top(datas);
-	parsing_map(datas);
-    return (0);
-}
 
 int	map_init(t_datas *datas)
 {
@@ -65,12 +23,33 @@ int	map_init(t_datas *datas)
 		mlx_destroy_window(datas->mlx, datas->win);
 		return (ft_error('w'));
 	}
-	init_images(datas);
+	init_images_1(datas);
+	init_images_2(datas);
 	parsing_map(datas);
-	mlx_hook(datas->win, 17, 0, key_event, datas);
+	datas->nbr_of_moves = 0;
+	mlx_hook(datas->win, 17, 0, close_event, datas);
 	mlx_hook(datas->win, 2, 0, key_event, datas);
 	mlx_loop(datas->mlx);
 	return (0);
+}
+
+void	nbr_of_collectible(t_datas *d)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (y < d->map->h)
+	{
+		x = 0;
+		while (x < d->map->w)
+		{
+			if (d->map->map[y][x] == 'C')
+				d->nbr_of_collect += 1;
+			x++;
+		}
+		y++;
+	}
 }
 
 int	parsing_map(t_datas *d)
@@ -102,7 +81,7 @@ int	parsing_map(t_datas *d)
 	return (0);
 }
 
-int	init_images(t_datas *d)
+int	init_images_1(t_datas *d)
 {
 	d->img = malloc(sizeof(t_images));
 	if (!d->img)
@@ -119,14 +98,21 @@ int	init_images(t_datas *d)
 		&d->img->collect.w, &d->img->collect.h);
 	if (!d->img->collect.xpm)
 		ft_error('i');
-	d->img->poney.xpm = mlx_xpm_file_to_image(d->mlx, "XPM/pinkie_Good.xpm", 
-		&d->img->poney.w, &d->img->poney.h);
-	if (!d->img->collect.xpm)
-		ft_error('i');
 	d->img->exit.xpm = mlx_xpm_file_to_image(d->mlx, "XPM/rainbow_Good.xpm", 
 		&d->img->exit.w, &d->img->exit.h);
 	if (!d->img->exit.xpm)
 		ft_error('i');
+	// d->img->final.xpm = mlx_xpm_file_to_image(d->mlx, "XPM/final.xpm", 
+	// 	&d->img->final.w, &d->img->final.h);
+	// if (!d->img->final.xpm)
+		ft_error('i');
 	return (0);
 }
 
+int	init_images_2(t_datas *d)
+{
+	d->img->poney.xpm = mlx_xpm_file_to_image(d->mlx, "XPM/pinkie_Good.xpm", 
+		&d->img->poney.w, &d->img->poney.h);
+	if (!d->img->collect.xpm)
+		ft_error('i');
+}
