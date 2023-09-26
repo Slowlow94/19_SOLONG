@@ -6,7 +6,7 @@
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 17:51:27 by salowie           #+#    #+#             */
-/*   Updated: 2023/04/17 19:04:57 by salowie          ###   ########.fr       */
+/*   Updated: 2023/09/26 17:21:06 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 		}
 		if (!(haystack[i[0]] == needle[i[1]]))
 		{
-				i[1] = 0;
-				i[2]++;
-				i[0] = i[2];
+			i[1] = 0;
+			i[2]++;
+			i[0] = i[2];
 		}
 	}
 	return (NULL);

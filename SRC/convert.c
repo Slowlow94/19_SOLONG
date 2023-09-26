@@ -6,7 +6,7 @@
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 15:39:59 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/22 17:45:35 by salowie          ###   ########.fr       */
+/*   Updated: 2023/09/26 17:37:00 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,12 @@
 
 int	check_format_ber(char *str)
 {
-    size_t len = ft_strlen(str);
+	size_t	len;
 
-    if (len < 4)
-        return (1);
-    return (ft_strcmp_mod(str + len - 4, ".ber"));
+	len = ft_strlen(str);
+	if (len < 4)
+		return (1);
+	return (ft_strcmp_mod(str + len - 4, ".ber"));
 }
 
 int	ft_strcmp_mod(char *s1, char *s2)
@@ -54,7 +55,7 @@ char	**convert_ber(char *lib)
 	return (map);
 }
 
-int		check_char(char *strings_collected)
+int	check_char(char *strings_collected)
 {
 	int	i;
 
@@ -66,7 +67,7 @@ int		check_char(char *strings_collected)
 		else if (strings_collected[i] == '\n' || strings_collected[i] == '0' 
 			|| strings_collected[i] == '1' || strings_collected[i] == 'C' 
 			|| strings_collected[i] == 'E' || strings_collected[i] == 'P')
-				i++;
+			i++;
 		else
 			return (1);
 	}

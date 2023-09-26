@@ -6,7 +6,7 @@
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 09:13:20 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/19 12:54:47 by salowie          ###   ########.fr       */
+/*   Updated: 2023/09/26 15:25:26 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ char	*ft_strdup(const char *s1)
 	while (str1[i])
 	{
 		str[i] = str1[i];
-		ft_printf("%c\n", str[i]);
-		ft_printf("%c\n", str1[i]);
 		i++;
 	}
 	str[i] = '\0';

@@ -6,7 +6,7 @@
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 17:47:22 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/19 19:07:52 by salowie          ###   ########.fr       */
+/*   Updated: 2023/09/26 17:22:29 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ char	*ft_free(char **str)
 	*str = NULL;
 	return (NULL);
 }
-
 
 char	*ft_keep_left(char *str)
 {

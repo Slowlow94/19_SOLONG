@@ -6,7 +6,7 @@
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 14:13:11 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/22 18:45:30 by salowie          ###   ########.fr       */
+/*   Updated: 2023/09/26 17:29:58 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,10 @@ int	ft_error(char c)
 		ft_printf("Smalleh, ERROR !\nCause : opening of fd failed\n");
 	else if (c == 'e')
 		ft_printf("Smalleh, ERROR !\nCause : no exit\n");
+	else if (c == 't')
+		ft_printf("Smalleh, ERROR !\nCause : too much exit\n");
+	else if (c == 'c')
+		ft_printf("Smalleh, ERROR !\nCause : no collectible to collect\n");
 	else
 		return (0);
 	return (1);
@@ -79,32 +83,23 @@ void	free_all(t_datas *d)
 	free(d);
 }
 
-void	free_map(int i, char **map)
-{
-	while (i >= 0)
-	{
-		free(map[i]);
-		--i;
-	}
-	free(map);
-}
-
 int	main(int argc, char **argv)
 {
-	t_datas *datas;
+	t_datas	*datas;
 	char	*lib;
 
 	datas = malloc(sizeof(t_datas));
 	if (datas == NULL)
 		exit(1);
 	datas->map = malloc(sizeof(t_map));
-    if (datas->map == NULL)
-    {
+	if (datas->map == NULL)
+	{
 		free_all(datas);
-        exit(1);
-    }
+		exit(1);
+	}
 	datas->img = NULL;
 	datas->yes_exit = 0;
+	datas->nbr_exit = 0;
 	datas->nbr_of_collect = 0;
 	if (argc != 2)
 		return (ft_error('f'));
@@ -113,6 +108,7 @@ int	main(int argc, char **argv)
 	lib = argv[1];
 	datas->map->map = convert_ber(lib);
 	check_map(datas);
+	dupmap_init(datas);
 	map_init(datas);
 	return (0);
 }

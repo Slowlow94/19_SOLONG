@@ -6,7 +6,7 @@
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:29:12 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/22 18:45:31 by salowie          ###   ########.fr       */
+/*   Updated: 2023/09/26 17:50:26 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdbool.h>
-#include <stdio.h> // ATTENTION
 
 typedef struct s_im_struct {
 	void	*xpm;
@@ -38,7 +37,6 @@ typedef struct s_images {
 	t_im_struct	ground;
 	t_im_struct	exit;
 	// t_im_struct	final;
-
 }				t_images;
 
 typedef struct s_map {
@@ -54,10 +52,13 @@ typedef struct s_datas {
 	void		*mlx;
 	void		*win;
 	int			status;
-	int			pos_of_x;
-	int			pos_of_y;
+	int			pers_x;
+	int			pers_y;
+	int			exit_y;
+	int			exit_x;
 	int			nbr_of_collect;
 	int			nbr_of_moves;
+	int			nbr_exit;
 	bool		yes_exit;
 }				t_datas;
 
@@ -68,9 +69,10 @@ void	free_all(t_datas *d);
 void	free_images(t_datas *d);
 
 // CHECK_MAP //
-int		same_lenght_and_exit(t_datas *d);
+int		same_lenght(t_datas *d);
 int		check_map(t_datas *datas);
 int		is_wall_all_around(t_datas *datas);
+int		is_exit_or_too_much(t_datas *d);
 void	count_map(t_map *map);
 
 // CONVERT //
@@ -83,16 +85,20 @@ int		ft_strcmp_mod(char *s1, char *s2);
 // INITIALISATION // 
 int		parsing_map(t_datas *datas);
 int		map_init(t_datas *datas);
-int		init_images_1(t_datas *datas);
-int		init_images_2(t_datas *datas);
-void	nbr_of_collectible(t_datas *d);
+int		init_images(t_datas *datas);
+int		nbr_of_collectible(t_datas *d);
 
 // EVENT//
 void	to_the_left(t_datas *datas);
 void	to_the_right(t_datas *datas);
 void	to_the_bottom(t_datas *datas);
 void	to_the_top(t_datas *datas);
+void	where_is_p(t_datas *datas);
 int		close_event(t_datas *datas);
 int		key_event(int keycode, void *param);
+
+// PATHFINDING //
+void	dupmap_init(t_datas *datas);
+int		find_exit(char **mappy, t_datas *d);
 
 #endif
