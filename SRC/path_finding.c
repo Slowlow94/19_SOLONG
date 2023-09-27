@@ -6,7 +6,7 @@
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 15:14:21 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/27 16:10:49 by salowie          ###   ########.fr       */
+/*   Updated: 2023/09/27 19:16:10 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,8 @@ void	dupmap_init(t_datas *d)
 	find_exit(mappy, d, d->pers_y, d->pers_x);
 	if (d->check_exit == 0)
 	{
-		ft_error('n');
-		free_all(d);
 		free_map(mappy);
-		exit (1);
+		ft_error(ERROR_PATH, d);
 	}
 }
 
@@ -56,11 +54,16 @@ void	find_exit(char **mappy, t_datas *d, int y, int x)
 {
 	if (y < 0 || x < 0 || y > d->map->h || x > d->map->w)
 		return ;
-	if (mappy[y][x] == 'E' && d->collect_cpy == d->nbr_of_collect)
+	if ((mappy[y][x] == 'E' || d->is_exit == true) 
+		&& d->collect_cpy == d->nbr_of_collect)
 		d->check_exit = true;
-	if (mappy[y][x] == '1' || mappy[y][x] == '2' 
-		|| (mappy[y][x] == 'E' && d->collect_cpy != d->nbr_of_collect))
+	if (mappy[y][x] == '1' || mappy[y][x] == '2')
 		return ;
+	if (mappy[y][x] == 'E' && d->collect_cpy != d->nbr_of_collect)
+	{
+		d->is_exit = true;
+		return ;
+	}
 	else if (mappy[y][x] == 'C' || mappy[y][x] == '0')
 	{
 		if (mappy[y][x] == 'C')

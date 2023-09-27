@@ -6,39 +6,17 @@
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 14:13:11 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/27 16:40:29 by salowie          ###   ########.fr       */
+/*   Updated: 2023/09/27 19:19:11 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int	ft_error(char c)
+void	ft_error(char *error_msg, t_datas *datas)
 {
-	if (c == 'f')
-		ft_printf("Smalleh, ERROR !\nCause : wrong format of text file\n");
-	else if (c == 'i')
-		ft_printf("Smalleh, ERROR !\nCause : image can't download\n");
-	else if (c == 'l')
-		ft_printf("Smalleh, ERROR !\nCause : the MinilibX is fucked up\n");
-	else if (c == 'w')
-		ft_printf("Smalleh, ERROR !\nCause : the window is fucked up\n");
-	else if (c == 'm')
-		ft_printf("Smalleh, ERROR !\nCause : invalide map bitch\n");
-	else if (c == 'a')
-		ft_printf("Smalleh, ERROR !\nCause : Wrong number of arguments\n");
-	else if (c == 'o')
-		ft_printf("Smalleh, ERROR !\nCause : opening of fd failed\n");
-	else if (c == 'e')
-		ft_printf("Smalleh, ERROR !\nCause : no exit\n");
-	else if (c == 't')
-		ft_printf("Smalleh, ERROR !\nCause : too much exit\n");
-	else if (c == 'c')
-		ft_printf("Smalleh, ERROR !\nCause : no collectible to collect\n");
-	else if (c == 'n')
-		ft_printf("Smalleh, ERROR !\nCause : no path to the exit\n");
-	else
-		return (0);
-	return (1);
+	ft_putstr(error_msg);
+	free_all(datas);
+	exit (1);
 }
 
 void	free_images(t_datas *d)
@@ -103,22 +81,18 @@ int	main(int argc, char **argv)
 	t_datas	*datas;
 	char	*lib;
 
+	lib = argv[1];
 	datas = malloc(sizeof(t_datas));
 	if (datas == NULL)
-		exit(1);
-	datas->map = malloc(sizeof(t_map));
-	if (datas->map == NULL)
 	{
 		free_all(datas);
 		exit(1);
 	}
-	init_variables(datas);
 	if (argc != 2)
-		return (ft_error('f'));
-	if (check_format_ber(argv[1]) != 0)
-		return (ft_error('f'));
-	lib = argv[1];
-	datas->map->map = convert_ber(lib);
+		ft_error(ERROR_ARG, datas);
+	if (check_format_ber(lib) != 0)
+		ft_error(ERROR_FILE, datas);
+	init_variables(datas, lib);
 	check_map(datas);
 	dupmap_init(datas);
 	map_init(datas);

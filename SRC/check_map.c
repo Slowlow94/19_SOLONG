@@ -6,7 +6,7 @@
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 12:35:06 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/26 17:41:53 by salowie          ###   ########.fr       */
+/*   Updated: 2023/09/27 19:26:06 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,19 @@ int	check_map(t_datas *datas)
 {
 	count_map(datas->map);
 	if (same_lenght(datas) == 1 || is_wall_all_around(datas) == 1 
-		|| is_exit_or_too_much(datas) == 1 || nbr_of_collectible(datas) == 1)
+		|| is_exit_or_too_much(datas) == 1 || nbr_of_collectible(datas) == 1 
+		|| nbr_of_player(datas) == 1)
 	{
 		if (datas->nbr_exit > 1)
-			ft_error('t');
+			ft_error(ERROR_TOO_EXIT, datas);
 		else if (datas->yes_exit == false)
-			ft_error('e');
+			ft_error(ERROR_NO_EXIT, datas);
 		else if (datas->nbr_of_collect < 1)
-			ft_error('c');
+			ft_error(ERROR_COLLECT, datas);
+		else if (datas->nbr_of_player > 1)
+			ft_error(ERROR_P, datas);
 		else
-			ft_error('m');
-		free_all(datas);
-		exit (1);
+			ft_error(ERROR_MAP, datas);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 15:39:59 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/26 17:37:00 by salowie          ###   ########.fr       */
+/*   Updated: 2023/09/27 19:18:11 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	ft_strcmp_mod(char *s1, char *s2)
 	return (s1[i] - s2[i]);
 }
 
-char	**convert_ber(char *lib)
+char	**convert_ber(char *lib, t_datas *datas)
 {
 	int		fd;
 	char	**map;
@@ -42,15 +42,13 @@ char	**convert_ber(char *lib)
 	fd = open(lib, O_RDONLY);
 	if (fd < 0)
 	{
-		ft_error('o');
-		exit (0);
+		ft_putstr(ERROR_FD);
+		free_all(datas);
+		exit (1);
 	}
 	strings_collected = collect_strings(fd);
 	if (check_char(strings_collected) == 1)
-	{
-		ft_error('m');
-		exit (0);
-	}
+		ft_error(ERROR_MAP, datas);
 	map = ft_split(strings_collected, '\n');
 	return (map);
 }
