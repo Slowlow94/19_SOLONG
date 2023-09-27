@@ -6,7 +6,7 @@
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:29:12 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/27 16:20:45 by salowie          ###   ########.fr       */
+/*   Updated: 2023/09/27 16:40:29 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ typedef struct s_im_struct {
 }				t_im_struct;
 
 typedef struct s_images {
-	t_im_struct	poney;
+	t_im_struct	pony;
 	t_im_struct	wall;
 	t_im_struct	collect;
 	t_im_struct	ground;

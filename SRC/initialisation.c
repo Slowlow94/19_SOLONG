@@ -6,7 +6,7 @@
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 18:00:12 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/27 16:24:17 by salowie          ###   ########.fr       */
+/*   Updated: 2023/09/27 16:40:29 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	init_variables(t_datas *datas)
 	datas->nbr_of_collect = 0;
 	datas->check_exit = 0;
 	datas->collect_cpy = 0;
+	datas->nbr_of_moves = 0;
 }
 
 int	map_init(t_datas *datas)
@@ -36,7 +37,6 @@ int	map_init(t_datas *datas)
 	}
 	init_images(datas);
 	parsing_map(datas);
-	datas->nbr_of_moves = 0;
 	mlx_hook(datas->win, 17, 0, close_event, datas);
 	mlx_hook(datas->win, 2, 0, key_event, datas);
 	mlx_loop(datas->mlx);
@@ -76,7 +76,7 @@ void	images_placement(t_datas *d, int size_tile, int y, int x)
 			d->img->collect.xpm, x * size_tile, y * size_tile);
 	if (d->map->map[y][x] == 'P')
 		mlx_put_image_to_window(d->mlx, d->win, 
-			d->img->poney.xpm, x * size_tile, y * size_tile);
+			d->img->pony.xpm, x * size_tile, y * size_tile);
 	if (d->map->map[y][x] == 'E')
 		mlx_put_image_to_window(d->mlx, d->win, 
 			d->img->exit.xpm, x * size_tile, y * size_tile);
@@ -103,8 +103,8 @@ int	init_images(t_datas *d)
 			&d->img->exit.w, &d->img->exit.h);
 	if (!d->img->exit.xpm)
 		ft_error('i');
-	d->img->poney.xpm = mlx_xpm_file_to_image(d->mlx, "XPM/pinkie_Good.xpm", 
-			&d->img->poney.w, &d->img->poney.h);
+	d->img->pony.xpm = mlx_xpm_file_to_image(d->mlx, "XPM/pinkie_Good.xpm", 
+			&d->img->pony.w, &d->img->pony.h);
 	if (!d->img->collect.xpm)
 		ft_error('i');
 	return (0);

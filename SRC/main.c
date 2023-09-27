@@ -6,7 +6,7 @@
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 14:13:11 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/27 16:24:38 by salowie          ###   ########.fr       */
+/*   Updated: 2023/09/27 16:40:29 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ void	free_images(t_datas *d)
 		mlx_destroy_image(d->mlx, d->img->ground.xpm);
 	if (d->img->collect.xpm)
 		mlx_destroy_image(d->mlx, d->img->collect.xpm);
-	if (d->img->poney.xpm)
-		mlx_destroy_image(d->mlx, d->img->poney.xpm);
+	if (d->img->pony.xpm)
+		mlx_destroy_image(d->mlx, d->img->pony.xpm);
 	if (d->img->exit.xpm)
 		mlx_destroy_image(d->mlx, d->img->exit.xpm);
 	if (d->img)
