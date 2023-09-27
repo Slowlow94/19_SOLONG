@@ -6,7 +6,7 @@
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 14:13:11 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/26 17:29:58 by salowie          ###   ########.fr       */
+/*   Updated: 2023/09/27 16:24:38 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int	ft_error(char c)
 		ft_printf("Smalleh, ERROR !\nCause : too much exit\n");
 	else if (c == 'c')
 		ft_printf("Smalleh, ERROR !\nCause : no collectible to collect\n");
+	else if (c == 'n')
+		ft_printf("Smalleh, ERROR !\nCause : no path to the exit\n");
 	else
 		return (0);
 	return (1);
@@ -53,12 +55,25 @@ void	free_images(t_datas *d)
 		mlx_destroy_image(d->mlx, d->img->poney.xpm);
 	if (d->img->exit.xpm)
 		mlx_destroy_image(d->mlx, d->img->exit.xpm);
-	// if (d->img->final.xpm)
-	// 	mlx_destroy_image(d->mlx, d->img->final.xpm);
 	if (d->img)
 		free(d->img);
 	else
 		return ;
+}
+
+void	free_map(char **mappy)
+{
+	int	y;
+
+	y = 0;
+	if (!mappy)
+		return ;
+	while (mappy && mappy[y])
+	{
+		free(mappy[y]);
+		y++;
+	}
+	free(mappy);
 }
 
 void	free_all(t_datas *d)
@@ -97,10 +112,7 @@ int	main(int argc, char **argv)
 		free_all(datas);
 		exit(1);
 	}
-	datas->img = NULL;
-	datas->yes_exit = 0;
-	datas->nbr_exit = 0;
-	datas->nbr_of_collect = 0;
+	init_variables(datas);
 	if (argc != 2)
 		return (ft_error('f'));
 	if (check_format_ber(argv[1]) != 0)

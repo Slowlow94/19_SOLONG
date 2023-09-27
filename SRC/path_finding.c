@@ -6,35 +6,13 @@
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 15:14:21 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/26 17:58:15 by salowie          ###   ########.fr       */
+/*   Updated: 2023/09/27 16:10:49 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void	where_is_exit(t_datas *datas)
-{
-	int	y;
-	int	x;
-
-	y = 0;
-	while (y < datas->map->h)
-	{
-		x = 0;
-		while (x < datas->map->w)
-		{
-			if (datas->map->map[y][x] == 'E')
-			{
-				datas->exit_x = x;
-				datas->exit_y = y;
-			}
-			x++;
-		}
-		y++;
-	}
-}
-
-void	dupmap_init(t_datas *d)
+char	**create_mappy(t_datas *d)
 {
 	char	**mappy;
 	int		y;
@@ -51,21 +29,46 @@ void	dupmap_init(t_datas *d)
 		mappy[y] = ft_strdup(d->map->map[y]);
 		y++;
 	}
-	where_is_p(d);
-	where_is_exit(d);
-	find_exit(mappy, d);
+	mappy[y] = NULL;
+	return (mappy);
 }
 
-int	find_exit(char **mappy, t_datas *d)
+void	dupmap_init(t_datas *d)
 {
-	static int	nbr_c;
-	static int	y;
-	static int	x;
+	char	**mappy;
+	int		y;
 
-	y = d->pers_y;
-	x = d->exit_x;
-	nbr_c = d->nbr_of_collect;
-	if (mappy[y][x] == mappy[d->exit_y][d->exit_x] && nbr_c == 0)
-		return (0);
-	return (0);
+	y = 0;
+	d->collect_cpy = 0;
+	mappy = create_mappy(d);
+	where_is_p(d);
+	find_exit(mappy, d, d->pers_y, d->pers_x);
+	if (d->check_exit == 0)
+	{
+		ft_error('n');
+		free_all(d);
+		free_map(mappy);
+		exit (1);
+	}
+}
+
+void	find_exit(char **mappy, t_datas *d, int y, int x)
+{
+	if (y < 0 || x < 0 || y > d->map->h || x > d->map->w)
+		return ;
+	if (mappy[y][x] == 'E' && d->collect_cpy == d->nbr_of_collect)
+		d->check_exit = true;
+	if (mappy[y][x] == '1' || mappy[y][x] == '2' 
+		|| (mappy[y][x] == 'E' && d->collect_cpy != d->nbr_of_collect))
+		return ;
+	else if (mappy[y][x] == 'C' || mappy[y][x] == '0')
+	{
+		if (mappy[y][x] == 'C')
+			d->collect_cpy++;
+		mappy[y][x] = '2';
+	}
+	find_exit(mappy, d, y + 1, x);
+	find_exit(mappy, d, y - 1, x);
+	find_exit(mappy, d, y, x + 1);
+	find_exit(mappy, d, y, x - 1);
 }

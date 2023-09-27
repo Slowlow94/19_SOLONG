@@ -1,41 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   event.c                                            :+:      :+:    :+:   */
+/*   check_map_2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/22 11:49:08 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/27 15:56:01 by salowie          ###   ########.fr       */
+/*   Created: 2023/09/27 16:22:52 by salowie           #+#    #+#             */
+/*   Updated: 2023/09/27 16:23:12 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int	key_event(int keycode, void *param)
+int	nbr_of_collectible(t_datas *d)
 {
-	t_datas	*datas;
+	int	x;
+	int	y;
 
-	datas = (t_datas *)param;
-	if (keycode == 53)
+	y = 0;
+	while (y < d->map->h)
 	{
-		mlx_destroy_window(datas->mlx, datas->win);
-		exit (0);
+		x = 0;
+		while (x < d->map->w)
+		{
+			if (d->map->map[y][x] == 'C')
+				d->nbr_of_collect += 1;
+			x++;
+		}
+		y++;
 	}
-	if (keycode == 123)
-		to_the_left(datas);
-	else if (keycode == 124)
-		to_the_right(datas);
-	else if (keycode == 125)
-		to_the_bottom(datas);
-	else if (keycode == 126)
-		to_the_top(datas);
-	parsing_map(datas);
+	if (d->nbr_of_collect < 1)
+		return (1);
 	return (0);
-}
-
-int	close_event(t_datas *datas)
-{
-	free_all(datas);
-	exit(0);
 }

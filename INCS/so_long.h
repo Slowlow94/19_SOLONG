@@ -6,7 +6,7 @@
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:29:12 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/26 17:50:26 by salowie          ###   ########.fr       */
+/*   Updated: 2023/09/27 16:20:45 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ typedef struct s_images {
 	t_im_struct	collect;
 	t_im_struct	ground;
 	t_im_struct	exit;
-	// t_im_struct	final;
 }				t_images;
 
 typedef struct s_map {
@@ -54,19 +53,19 @@ typedef struct s_datas {
 	int			status;
 	int			pers_x;
 	int			pers_y;
-	int			exit_y;
-	int			exit_x;
 	int			nbr_of_collect;
 	int			nbr_of_moves;
+	int			collect_cpy;
 	int			nbr_exit;
+	bool		check_exit;
 	bool		yes_exit;
 }				t_datas;
 
 // ERRORS //
 int		ft_error(char c);
-void	free_map(int i, char **map);
 void	free_all(t_datas *d);
 void	free_images(t_datas *d);
+void	free_map(char **mappy);
 
 // CHECK_MAP //
 int		same_lenght(t_datas *d);
@@ -82,11 +81,13 @@ int		check_char(char *strings_collected);
 int		check_format_ber(char *str);
 int		ft_strcmp_mod(char *s1, char *s2);
 
-// INITIALISATION // 
+// INITIALISATION //
 int		parsing_map(t_datas *datas);
 int		map_init(t_datas *datas);
 int		init_images(t_datas *datas);
 int		nbr_of_collectible(t_datas *d);
+void	init_variables(t_datas *datas);
+void	images_placement(t_datas *d, int size_tile, int y, int x);
 
 // EVENT//
 void	to_the_left(t_datas *datas);
@@ -99,6 +100,7 @@ int		key_event(int keycode, void *param);
 
 // PATHFINDING //
 void	dupmap_init(t_datas *datas);
-int		find_exit(char **mappy, t_datas *d);
+void	where_is_exit(t_datas *datas);
+void	find_exit(char **mappy, t_datas *d, int y, int x);
 
 #endif

@@ -6,11 +6,21 @@
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 18:00:12 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/26 17:50:17 by salowie          ###   ########.fr       */
+/*   Updated: 2023/09/27 16:24:17 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
+
+void	init_variables(t_datas *datas)
+{
+	datas->img = NULL;
+	datas->yes_exit = 0;
+	datas->nbr_exit = 0;
+	datas->nbr_of_collect = 0;
+	datas->check_exit = 0;
+	datas->collect_cpy = 0;
+}
 
 int	map_init(t_datas *datas)
 {
@@ -33,55 +43,43 @@ int	map_init(t_datas *datas)
 	return (0);
 }
 
-int	nbr_of_collectible(t_datas *d)
+int	parsing_map(t_datas *d)
 {
 	int	x;
 	int	y;
+	int	size_tile;
 
+	size_tile = 64;
 	y = 0;
 	while (y < d->map->h)
 	{
 		x = 0;
 		while (x < d->map->w)
 		{
-			if (d->map->map[y][x] == 'C')
-				d->nbr_of_collect += 1;
+			mlx_put_image_to_window(d->mlx, d->win, 
+				d->img->ground.xpm, x * size_tile, y * size_tile);
+			images_placement(d, size_tile, y, x);
 			x++;
 		}
 		y++;
 	}
-	if (d->nbr_of_collect < 1)
-		return (1);
 	return (0);
 }
 
-int	parsing_map(t_datas *d)
+void	images_placement(t_datas *d, int size_tile, int y, int x)
 {
-	int	st;
-	int	x;
-	int	y;
-
-	st = 64;
-	y = 0;
-	while (y < d->map->h)
-	{
-		x = 0;
-		while (x < d->map->w)
-		{
-			mlx_put_image_to_window(d->mlx, d->win, d->img->ground.xpm, x * st, y * st);
-			if (d->map->map[y][x] == '1')
-				mlx_put_image_to_window(d->mlx, d->win, d->img->wall.xpm, x * st, y * st);
-			if (d->map->map[y][x] == 'C')
-				mlx_put_image_to_window(d->mlx, d->win, d->img->collect.xpm, x * st, y * st);
-			if (d->map->map[y][x] == 'P')
-				mlx_put_image_to_window(d->mlx, d->win, d->img->poney.xpm, x * st, y * st);
-			if (d->map->map[y][x] == 'E')
-				mlx_put_image_to_window(d->mlx, d->win, d->img->exit.xpm, x * st, y * st);
-			x++;
-		}
-		y++;
-	}
-	return (0);
+	if (d->map->map[y][x] == '1')
+		mlx_put_image_to_window(d->mlx, d->win, 
+			d->img->wall.xpm, x * size_tile, y * size_tile);
+	if (d->map->map[y][x] == 'C')
+		mlx_put_image_to_window(d->mlx, d->win, 
+			d->img->collect.xpm, x * size_tile, y * size_tile);
+	if (d->map->map[y][x] == 'P')
+		mlx_put_image_to_window(d->mlx, d->win, 
+			d->img->poney.xpm, x * size_tile, y * size_tile);
+	if (d->map->map[y][x] == 'E')
+		mlx_put_image_to_window(d->mlx, d->win, 
+			d->img->exit.xpm, x * size_tile, y * size_tile);
 }
 
 int	init_images(t_datas *d)
