@@ -6,7 +6,7 @@
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 15:14:21 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/27 19:16:10 by salowie          ###   ########.fr       */
+/*   Updated: 2023/09/29 10:39:22 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ char	**create_mappy(t_datas *d)
 	mappy = malloc(sizeof(char *) * (d->map->h + 1));
 	if (mappy == NULL)
 	{
-		free_all(d);
+		ft_error_map(ERROR_MALLOC, d);
+		free_map(mappy);
 		exit(1);
 	}
 	while (y < d->map->h)
@@ -31,6 +32,28 @@ char	**create_mappy(t_datas *d)
 	}
 	mappy[y] = NULL;
 	return (mappy);
+}
+
+void	where_is_p(t_datas *datas)
+{
+	int	y;
+	int	x;
+
+	y = 0;
+	while (y < datas->map->h)
+	{
+		x = 0;
+		while (x < datas->map->w)
+		{
+			if (datas->map->map[y][x] == 'P')
+			{
+				datas->pers_x = x;
+				datas->pers_y = y;
+			}
+			x++;
+		}
+		y++;
+	}
 }
 
 void	dupmap_init(t_datas *d)
@@ -46,7 +69,7 @@ void	dupmap_init(t_datas *d)
 	if (d->check_exit == 0)
 	{
 		free_map(mappy);
-		ft_error(ERROR_PATH, d);
+		ft_error_map(ERROR_PATH, d);
 	}
 }
 

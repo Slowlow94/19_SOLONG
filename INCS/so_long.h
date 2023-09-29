@@ -6,7 +6,7 @@
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:29:12 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/27 19:24:53 by salowie          ###   ########.fr       */
+/*   Updated: 2023/09/29 11:03:13 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 # define ERROR_COLLECT "Smalleh, ERROR !\nCause : no collectible to collect\n"
 # define ERROR_PATH "Smalleh, ERROR !\nCause : no path to the exit\n"
 # define ERROR_P "Smalleh, ERROR !\nCause : too much player for this game\n"
+# define ERROR_MALLOC "Smalleh, ERROR !\nCause : malloc failed\n"
 
 typedef struct s_im_struct {
 	void	*xpm;
@@ -78,17 +79,19 @@ typedef struct s_datas {
 
 // ERRORS //
 void	ft_error(char *error_msg, t_datas *datas);
+void	ft_error_map(char *error_msg, t_datas *datas);
 void	free_all(t_datas *d);
 void	free_images(t_datas *d);
 void	free_map(char **mappy);
 
 // CHECK_MAP //
+void	check_arg(int argc, char *lib, t_datas *datas);
+void	count_map(t_map *map);
 int		same_lenght(t_datas *d);
 int		check_map(t_datas *datas);
 int		is_wall_all_around(t_datas *datas);
 int		is_exit_or_too_much(t_datas *d);
 int		nbr_of_player(t_datas *d);
-void	count_map(t_map *map);
 
 // CONVERT //
 char	**convert_ber(char *lib, t_datas *datas);

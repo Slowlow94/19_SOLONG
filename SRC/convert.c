@@ -6,51 +6,29 @@
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 15:39:59 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/27 19:18:11 by salowie          ###   ########.fr       */
+/*   Updated: 2023/09/29 10:34:25 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int	check_format_ber(char *str)
+char	*collect_strings(int fd)
 {
-	size_t	len;
-
-	len = ft_strlen(str);
-	if (len < 4)
-		return (1);
-	return (ft_strcmp_mod(str + len - 4, ".ber"));
-}
-
-int	ft_strcmp_mod(char *s1, char *s2)
-{
-	int	i;
-
-	i = 0;
-	while (s1[i] == s2[i] && s1[i] && s2[i])
-		i++;
-	return (s1[i] - s2[i]);
-}
-
-char	**convert_ber(char *lib, t_datas *datas)
-{
-	int		fd;
-	char	**map;
 	char	*strings_collected;
+	char	*str;
+	char	*temp;
 
-	map = NULL;
-	fd = open(lib, O_RDONLY);
-	if (fd < 0)
+	str = get_next_line(fd);
+	strings_collected = NULL;
+	while (str)
 	{
-		ft_putstr(ERROR_FD);
-		free_all(datas);
-		exit (1);
+		temp = strings_collected;
+		strings_collected = ft_strjoin_mod(temp, str);
+		free(temp);
+		free(str);
+		str = get_next_line(fd);
 	}
-	strings_collected = collect_strings(fd);
-	if (check_char(strings_collected) == 1)
-		ft_error(ERROR_MAP, datas);
-	map = ft_split(strings_collected, '\n');
-	return (map);
+	return (strings_collected);
 }
 
 int	check_char(char *strings_collected)
@@ -72,21 +50,39 @@ int	check_char(char *strings_collected)
 	return (0);
 }
 
-char	*collect_strings(int fd)
+char	**convert_ber(char *lib, t_datas *datas)
 {
+	int		fd;
+	char	**map;
 	char	*strings_collected;
-	char	*str;
-	char	*temp;
 
-	str = get_next_line(fd);
-	strings_collected = NULL;
-	while (str)
-	{
-		temp = strings_collected;
-		strings_collected = ft_strjoin_mod(temp, str);
-		free(temp);
-		free(str);
-		str = get_next_line(fd);
-	}
-	return (strings_collected);
+	map = NULL;
+	fd = open(lib, O_RDONLY);
+	if (fd < 0)
+		ft_error_map(ERROR_FD, datas);
+	strings_collected = collect_strings(fd);
+	if (check_char(strings_collected) == 1)
+		ft_error_map(ERROR_MAP, datas);
+	map = ft_split(strings_collected, '\n');
+	return (map);
+}
+
+int	check_format_ber(char *str)
+{
+	size_t	len;
+
+	len = ft_strlen(str);
+	if (len < 4)
+		return (1);
+	return (ft_strcmp_mod(str + len - 4, ".ber"));
+}
+
+int	ft_strcmp_mod(char *s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	while (s1[i] == s2[i] && s1[i] && s2[i])
+		i++;
+	return (s1[i] - s2[i]);
 }

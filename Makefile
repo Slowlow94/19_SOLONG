@@ -1,5 +1,6 @@
 NAME	= so_long
-SRCS	= ./SRC/check_map.c \
+SRCS	= ./SRC/errors.c \
+./SRC/check_map.c \
 ./SRC/check_map_2.c \
 ./SRC/convert.c \
 ./SRC/event.c \

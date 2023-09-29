@@ -6,7 +6,7 @@
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 11:49:08 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/27 18:50:55 by salowie          ###   ########.fr       */
+/*   Updated: 2023/09/29 11:45:15 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,9 @@ int	key_event(int keycode, void *param)
 
 int	close_event(t_datas *datas)
 {
-	free_all(datas);
+	free_map(datas->map->map);
+	free(datas->map);
+	free(datas->img);
+	free(datas);
 	exit(0);
 }

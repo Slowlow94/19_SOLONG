@@ -6,33 +6,11 @@
 /*   By: salowie <salowie@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 18:12:52 by salowie           #+#    #+#             */
-/*   Updated: 2023/09/27 16:00:52 by salowie          ###   ########.fr       */
+/*   Updated: 2023/09/29 10:39:12 by salowie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-
-void	where_is_p(t_datas *datas)
-{
-	int	y;
-	int	x;
-
-	y = 0;
-	while (y < datas->map->h)
-	{
-		x = 0;
-		while (x < datas->map->w)
-		{
-			if (datas->map->map[y][x] == 'P')
-			{
-				datas->pers_x = x;
-				datas->pers_y = y;
-			}
-			x++;
-		}
-		y++;
-	}
-}
 
 void	to_the_left(t_datas *datas)
 {
@@ -54,7 +32,6 @@ void	to_the_left(t_datas *datas)
 		ft_printf("Nbr_of_moves : %d\n", datas->nbr_of_moves += 1);
 		ft_printf("Congrats, you saved pinkiie !\n");
 		mlx_destroy_window(datas->mlx, datas->win);
-		free_all(datas);
 		exit(0);
 	}
 }
@@ -79,7 +56,6 @@ void	to_the_right(t_datas *datas)
 		ft_printf("Nbr_of_moves : %d\n", datas->nbr_of_moves += 1);
 		ft_printf("Congrats, you saved pinkiie !\n");
 		mlx_destroy_window(datas->mlx, datas->win);
-		free_all(datas);
 		exit(0);
 	}
 }
@@ -104,7 +80,6 @@ void	to_the_bottom(t_datas *datas)
 		ft_printf("Nbr_of_moves : %d\n", datas->nbr_of_moves += 1);
 		ft_printf("Congrats, you saved pinkiie !\n");
 		mlx_destroy_window(datas->mlx, datas->win);
-		free_all(datas);
 		exit(0);
 	}
 }
@@ -129,7 +104,6 @@ void	to_the_top(t_datas *datas)
 		ft_printf("Nbr_of_moves : %d\n", datas->nbr_of_moves += 1);
 		ft_printf("Congrats, you saved pinkiie !\n");
 		mlx_destroy_window(datas->mlx, datas->win);
-		free_all(datas);
 		exit(0);
 	}
 }
